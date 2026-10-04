@@ -1,0 +1,19 @@
+database:
+  dsn: "postgres://postgres:postgres@postgres:5432/cleaner?sslmode=disable"
+
+s3:
+  endpoint:         "http://minio:9000"
+  region:           "us-east-1"
+  bucket:           "media"
+  access_key_id:    "minioadmin"
+  secret_access_key: "minioadmin"
+  use_path_style:   true
+  paths:
+    - "uploads/"
+    - "documents/"
+
+cleaner:
+  db_page_size:         1000
+  s3_delete_batch_size: 1000
+  state_file:           "/app/state/state.json"
+  dry_run:              false

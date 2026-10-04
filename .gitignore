@@ -1,0 +1,23 @@
+# Binaries
+/bin/
+
+# Do NOT commit real credentials or run state
+config.local.yaml
+state.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Go
+vendor/
+*.test
+
+# OS
+.DS_Store
+
+# Run artifacts
+failed_deletions.jsonl
+state.json.tmp

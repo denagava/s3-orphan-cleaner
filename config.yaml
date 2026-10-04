@@ -1,0 +1,26 @@
+database:
+  dsn: "postgres://postgres:postgres@localhost:5432/cleaner?sslmode=disable"
+
+s3:
+  endpoint: "http://localhost:9000"
+  region: "us-east-1"
+  bucket: "media"
+  access_key_id: "minioadmin"
+  secret_access_key: "minioadmin"
+  use_path_style: true
+  paths:
+    - "uploads/"
+    - "images/"
+    - "documents/"
+
+cleaner:
+  db_page_size: 1000
+  s3_delete_batch_size: 1000
+  state_file: "state.json"
+  dry_run: false
+  # Safety guard against wiping the bucket when the DSN points to the wrong DB.
+  # If fewer assets than this are found in the DB, phase 3 (delete) will not run.
+  # 0 = disabled (default, keeps tests and dev runs simple)
+  # Recommended for production: min_db_assets: 1
+  min_db_assets: 0
+  stash_file: "failed_deletions.jsonl"

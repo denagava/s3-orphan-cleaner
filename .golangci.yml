@@ -1,0 +1,27 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - errcheck       # unchecked errors
+    - gosimple       # simplifiable code
+    - govet          # vet checks
+    - ineffassign    # assignments with no effect
+    - staticcheck    # static analysis
+    - unused         # unused code
+    - misspell       # typos in comments/strings
+    - goimports      # import order
+
+linters-settings:
+  goimports:
+    # keep internal imports grouped separately from third-party
+    local-prefixes: github.com/denagava/s3-orphan-cleaner
+
+issues:
+  exclude-rules:
+    # test files: allow errcheck on deferred closes / exec calls
+    - path: "_test\\.go"
+      linters: [errcheck]
+    # integration tests use //nolint comments intentionally
+    - path: "tests/integration"
+      linters: [errcheck]
