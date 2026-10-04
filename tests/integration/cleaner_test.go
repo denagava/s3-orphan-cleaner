@@ -106,11 +106,16 @@ func startPostgres(ctx context.Context) (testcontainers.Container, string, error
 func startMinio(ctx context.Context) (testcontainers.Container, string, error) {
 	c, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image:        "quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z",
+			// MinIO no longer publishes images to Docker Hub / Quay;
+			// Chainguard keeps a free, maintained build.
+			Image:        "cgr.dev/chainguard/minio:latest",
+			User:         "0:0",
 			Env:          map[string]string{"MINIO_ROOT_USER": minioUser, "MINIO_ROOT_PASSWORD": minioPassword},
 			Cmd:          []string{"server", "/data"},
 			ExposedPorts: []string{"9000/tcp"},
-			WaitingFor:   wait.ForListeningPort("9000/tcp").WithStartupTimeout(60 * time.Second),
+			WaitingFor: wait.ForHTTP("/minio/health/live").
+				WithPort("9000/tcp").
+				WithStartupTimeout(60 * time.Second),
 		},
 		Started: true,
 	})

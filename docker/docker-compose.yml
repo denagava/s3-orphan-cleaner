@@ -20,7 +20,9 @@ services:
       start_period: 10s
 
   minio:
-    image: quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z
+    # MinIO no longer publishes images to Docker Hub / Quay; Chainguard keeps a free build.
+    image: cgr.dev/chainguard/minio:latest
+    user: "0:0"
     restart: unless-stopped
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -31,12 +33,6 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO /dev/null http://localhost:9000/minio/health/live || exit 1"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 15s
 
   app:
     build:
@@ -48,7 +44,7 @@ services:
       postgres:
         condition: service_healthy
       minio:
-        condition: service_healthy
+        condition: service_started
     volumes:
       - ./config-docker.yaml:/app/config.yaml:ro
       - app_state:/app/state
