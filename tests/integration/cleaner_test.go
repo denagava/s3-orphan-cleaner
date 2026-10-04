@@ -106,7 +106,7 @@ func startPostgres(ctx context.Context) (testcontainers.Container, string, error
 func startMinio(ctx context.Context) (testcontainers.Container, string, error) {
 	c, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image:        "minio/minio:latest",
+			Image:        "quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z",
 			Env:          map[string]string{"MINIO_ROOT_USER": minioUser, "MINIO_ROOT_PASSWORD": minioPassword},
 			Cmd:          []string{"server", "/data"},
 			ExposedPorts: []string{"9000/tcp"},
